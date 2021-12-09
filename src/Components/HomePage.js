@@ -30,6 +30,21 @@ const HomePage = () => {
         peerInstance.current = peer;
     }, [])
 
+
+    const call = (remotePeerId) =>{
+        var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        getUserMedia({video: true, audio: true}, (mediaStream) =>{
+            currentUserVideoRef.current.srcObject = mediaStream;
+            currentUserVideoRef.current.play();
+
+            const call = peerInstance.current.call(remotePeerId, mediaStream);
+            call.on('stream', (remoteStream) =>{
+                remoteVideoRef.current.srcObject = remoteStream;
+                remoteVideoRef.current.play();
+            })
+
+        })
+    }
     
 
     return (
